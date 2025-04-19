@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketNest - Cinema Selection</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .logo span {
+            color: #6a0dad;
+        }
+        .movie-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .date-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px;
+        }
+        .date-box {
+            padding: 10px;
+            border: 1px solid #6a0dad;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100px;
+            font-weight: bold;
+        }
+        .date-box.selected, .date-box:hover {
+            background-color: #6a0dad;
+            color: white;
+        }
+        .cinema-list {
+            padding: 20px;
+        }
+        .cinema-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .showtimes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .showtime-btn {
+            padding: 10px 15px;
+            border: 1px solid #6a0dad;
+            background: white;
+            color: #6a0dad;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .showtime-btn:hover {
+            background-color: #6a0dad;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">Ticket<span>Nest</span></div>
+    </nav>
+</header>
+
+<!-- Movie Name Display -->
+<h1 class="movie-title" th:text="'Now Showing: ' + ${movieName}">Loading...</h1>
+
+<!-- Date Selector (Generated Dynamically) -->
+<section class="date-selector" id="date-selector">
+</section>
+
+<section class="cinema-list" id="cinema-list">
+</section>
+
+<!-- Thymeleaf JSON Data -->
+<script th:inline="javascript">
+    let shows = /*[[${shows}]]*/ [];
+</script>
+
+<script>
+    // Generate the date range (Today + Next 5 Days)
+    function generateDateRange() {
+        let dateSelector = document.getElementById("date-selector");
+        let today = new Date();
+        for (let i = 0; i < 6; i++) {
+            let date = new Date();
+            date.setDate(today.getDate() + i);
+
+            let day = date.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
+            let formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+
+            let dateBox = document.createElement("div");
+            dateBox.classList.add("date-box");
+            if (i === 0) dateBox.classList.add("selected");
+            dateBox.innerHTML = `${day} <br> ${formattedDate}`;
+            dateBox.setAttribute("onclick", `updateShowtimes('${formattedDate}', this)`);
+            dateSelector.appendChild(dateBox);
+        }
+    }
+
+    // Convert 24-hour format (HH.MM) to 12-hour format with AM/PM
+    function convertTo12HourFormat(time) {
+        let [hours, minutes] = time.split('.').map(Number);
+        let amPm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+        return `${hours}:${minutes.toString().padStart(2, '0')} ${amPm}`;
+    }
+
+    // Group Shows by Theatre for Selected Date
+    function groupShowsByTheatre(shows, selectedDate) {
+        let theatreMap = {};
+
+        // Group shows by theatre for the selected date
+        shows.forEach(show => {
+            if (show.date === selectedDate) {
+                if (!theatreMap[show.theatre]) {
+                    theatreMap[show.theatre] = [];
+                }
+                theatreMap[show.theatre].push(convertTo12HourFormat(show.time)); // Convert time format
+            }
+        });
+
+        return theatreMap;
+    }
+
+    // Update Showtimes Based on Selected Date
+    function updateShowtimes(selectedDate, selectedElement) {
+        // Remove previous selection
+        document.querySelectorAll(".date-box").forEach(box => box.classList.remove("selected"));
+        selectedElement.classList.add("selected");
+
+        // Group shows by theatre
+        let groupedShows = groupShowsByTheatre(shows, selectedDate);
+
+        // Clear previous cinema list
+        let cinemaList = document.getElementById("cinema-list");
+        cinemaList.innerHTML = "";
+
+        // Populate the cinema list
+        Object.keys(groupedShows).forEach(theatre => {
+            let cinemaCard = document.createElement("div");
+            cinemaCard.classList.add("cinema-card");
+
+            let theatreTitle = document.createElement("h3");
+            theatreTitle.innerText = theatre;
+            cinemaCard.appendChild(theatreTitle);
+
+            let showtimesDiv = document.createElement("div");
+            showtimesDiv.classList.add("showtimes");
+
+            groupedShows[theatre].forEach(time => {
+                let btn = document.createElement("button");
+                btn.classList.add("showtime-btn");
+                btn.innerText = time; // Show the converted 12-hour format
+                btn.onclick = () => navigateToSeatSelection(time, selectedDate, theatre);
+                showtimesDiv.appendChild(btn);
+            });
+
+            cinemaCard.appendChild(showtimesDiv);
+            cinemaList.appendChild(cinemaCard);
+        });
+    }
+
+    // Navigate to Seat Selection
+    function navigateToSeatSelection(time, date, theatre) {
+        let movieName = `[[${movieName}]]`;
+        window.location.href = `/cinemaSeating?movieName=${encodeURIComponent(movieName)}&showTime=${encodeURIComponent(time)}&showDate=${encodeURIComponent(date)}&theatre=${encodeURIComponent(theatre)}`;
+    }
+
+    // Initialize Date Selection and Filter Shows
+    document.addEventListener("DOMContentLoaded", () => {
+        generateDateRange();
+        let firstDate = document.querySelector(".date-box").innerText.split("\n")[1].trim();
+        updateShowtimes(firstDate, document.querySelector(".date-box.selected"));
+    });
+</script>
+
+</body>
+</html>

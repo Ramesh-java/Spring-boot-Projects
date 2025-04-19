@@ -1,0 +1,362 @@
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketNest - Seat Selection</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        .screen {
+            background: #6a0dad;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .seat-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .seat.selected {
+            background-color: #6a0dad;
+            color: white;
+        }
+        .seat.sold {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .legend div {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+        .legend span {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+        .available { background-color: #ddd; }
+        .selected { background-color: #6a0dad; }
+        .sold { background-color: #888; }
+        .book-btn {
+            text-decoration: none;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>TicketNest - Select Your Seats</h2>
+<div class="screen">Screen This Way</div>
+
+<div class="seat-container">
+    &lt;!&ndash; Generate 20 seats dynamically &ndash;&gt;
+    <div th:each="seatNum : ${#numbers.sequence(1, 20)}"
+         th:classappend="${availableSeats.contains(seatNum)} ? '' : 'sold'"
+         class="seat"
+         th:text="${seatNum}"
+         th:attr="data-seat=${seatNum}"
+         th:onclick="${availableSeats.contains(seatNum)} ? 'selectSeat(this)' : ''">
+    </div>
+</div>
+
+<div class="legend">
+    <div><span class="available"></span> Available</div>
+    <div><span class="selected"></span> Selected</div>
+    <div><span class="sold"></span> Sold</div>
+</div>
+
+<button class="book-btn" onclick="bookSeats()">Book Now</button>
+
+<script>
+    function selectSeat(seat) {
+        seat.classList.toggle("selected");
+    }
+
+    function bookSeats() {
+        let selectedSeats = [];
+        document.querySelectorAll(".seat.selected").forEach(seat => {
+            selectedSeats.push(seat.dataset.seat);
+        });
+
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat!");
+            return;
+        }
+
+        alert("Seats booked: " + selectedSeats.join(", "));
+    }
+</script>
+</body>
+</html>-->
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketNest - Seat Selection</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        .screen {
+            background: #6a0dad;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .seat-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .seat.selected {
+            background-color: #6a0dad;
+            color: white;
+        }
+        .seat.sold {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .legend div {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+        }
+        .legend span {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+        .available { background-color: #ddd; }
+        .selected { background-color: #6a0dad; }
+        .sold { background-color: #888; }
+        .book-btn {
+            text-decoration: none;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .seat-layout {
+            text-align: center;
+        }
+        .screen {
+            background: #6a0dad;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .seating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .seat-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .row-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .seats {
+            display: flex;
+            gap: 8px;
+        }
+        .seat {
+            width: 35px;
+            height: 35px;
+            background-color: #ddd;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .seat.sold {
+            background-color: grey; /* Grey out sold seats */
+            cursor: not-allowed; /* Show disabled cursor */
+            pointer-events: none; /* Prevent selection */
+        }
+        .seat.selected {
+            background-color: #6a0dad;
+            color: white;
+        }
+
+    </style>
+    <script>
+        function selectSeat(seat) {
+            if (!seat.classList.contains("sold")) {
+                seat.classList.toggle("selected");
+            }
+        }
+
+        function bookSeats() {
+            let selectedSeats = [];
+            let selectedRows = new Set(); // Use a Set to collect unique row values
+
+            document.querySelectorAll(".seat.selected").forEach(seat => {
+                selectedSeats.push(seat.dataset.seat);
+                selectedRows.add(seat.dataset.seat.charAt(0)); // Extract row letter
+            });
+
+            if (selectedSeats.length === 0) {
+                alert("Please select at least one seat!");
+                return;
+            }
+
+            if (selectedRows.size > 1) {
+                alert("Please select seats from the same row!");
+                return;
+            }
+
+            // Extract the row (since we only allow selection from one row)
+            const row = [...selectedRows][0];
+
+            // Collect movie details from hidden inputs
+            const movieName = document.getElementById("movieName").value;
+            const date = document.getElementById("showDate").value;
+            const time = document.getElementById("showTime").value;
+            const theatre = document.getElementById("theatre").value;
+
+            // Construct query string
+            const queryString = `?movieName=${encodeURIComponent(movieName)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&theatre=${encodeURIComponent(theatre)}&seats=${encodeURIComponent(selectedSeats.join(","))}&row=${encodeURIComponent(row)}`;
+
+            // Redirect to order page with query parameters
+            window.location.href = `/order` + queryString;
+
+        }
+    </script>
+</head>
+<body>
+<h2>TicketNest - Select Your Seats</h2>
+<div class="screen">Screen This Way</div>
+
+<!-- Hidden fields to store Thymeleaf values -->
+<input type="hidden" id="movieName" th:value="${movieName}">
+<input type="hidden" id="showDate" th:value="${date}">
+<input type="hidden" id="showTime" th:value="${time}">
+<input type="hidden" id="theatre" th:value="${theatre}">
+
+<div class="seat-container">
+    <div th:each="row : ${seatRows}" class="seat-row">
+        <span class="row-label" th:text="${row}"></span>
+        <div class="seats">
+            <div th:each="seatNum : ${#numbers.sequence(1, 15)}"
+                 th:classappend="${availableSeats.contains(row + seatNum)} ? '' : 'sold'"
+                 class="seat"
+                 th:text="${seatNum}"
+                 th:attr="data-seat=${row + seatNum}"
+                 th:onclick="${availableSeats.contains(row + seatNum)} ? 'selectSeat(this)' : ''">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="seat-container">-->
+<!--    <div class="seat-container">-->
+<!--        &lt;!&ndash; Generate 20 seats dynamically &ndash;&gt;-->
+<!--        <div th:each="seatNum : ${#numbers.sequence(1, 20)}"-->
+<!--             th:classappend="${availableSeats.contains(seatNum)} ? '' : 'sold'"-->
+<!--             class="seat"-->
+<!--             th:text="${seatNum}"-->
+<!--             th:attr="data-seat=${seatNum}"-->
+<!--             th:onclick="${availableSeats.contains(seatNum)} ? 'selectSeat(this)' : ''">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="legend">
+    <div><span class="available"></span> Available</div>
+    <div><span class="selected"></span> Selected</div>
+    <div><span class="sold"></span> Sold</div>
+</div>
+
+<button class="book-btn" onclick="bookSeats()">Book Now</button>
+
+</body>
+</html>

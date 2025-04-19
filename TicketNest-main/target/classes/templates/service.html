@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services - TicketNest</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+      background-color: white;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .logo span{
+      color: #6a0dad;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    .nav-links a:hover {
+      color: #6a0dad;
+    }
+    .service-container {
+      text-align: center;
+      padding: 60px;
+    }
+    .service-container h1 {
+      font-size: 34px;
+      font-weight: bold;
+      color: #6a0dad;
+    }
+    .services-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .service-box {
+      background-color: white;
+      padding: 20px;
+      width: 280px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease-in-out;
+    }
+    .service-box:hover {
+      /*transform: scale(1.09);*/
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
+    }
+    .service-box img {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+    .service-box h3 {
+      font-size: 22px;
+      color: #6a0dad;
+    }
+    .service-box p {
+      font-size: 14px;
+      color: #555;
+    }
+    /* Remove default link styles */
+    .service-link {
+      text-decoration: none;
+      color: inherit;
+    }
+    .service-box {
+      width: 280px;
+      height: 300px; /* Ensures all service boxes remain the same height */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .service-box img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar">
+    <div class="logo">Ticket<span>Nest</span></div>
+    <ul class="nav-links">
+      <li><a th:href="@{/dashboard}">Home</a></li>
+      <!--<li><a href="#">Services</a></li> -->
+      <li><a th:href="@{/aboutin}">About</a></li>
+      <li><a th:href="@{/contact}">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="service-container">
+  <h1>Our Services</h1>
+  <div class="services-grid">
+    <a th:href="@{/bus}" class="service-link">
+      <div class="service-box">
+        <img src="/bus_icon.jpg" alt="Bus Service">
+        <h3>Bus Booking</h3>
+        <p>Book bus tickets easily and travel to your favorite destinations with comfort.</p>
+      </div>
+    </a>
+    <a th:href="@{/train}" class="service-link">
+      <div class="service-box">
+        <img src="/train_icon.jpg" alt="Train Service">
+        <h3>Train Booking</h3>
+        <p>Seamless train ticket booking with instant confirmation and best prices.</p>
+      </div>
+    </a>
+    <a th:href="@{/movie}" class="service-link">
+      <div class="service-box">
+        <img src="/movie_icon.jpeg" alt="Movie Tickets">
+        <h3>Movie Tickets</h3>
+        <p>Reserve movie tickets effortlessly and enjoy the latest blockbuster hits.</p>
+      </div>
+    </a>
+  </div>
+</section>
+</body>
+</html>

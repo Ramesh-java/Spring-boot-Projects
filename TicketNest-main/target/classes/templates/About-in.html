@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - TicketNest</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f1f3f6;
+      color: #222;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: #333;
+    }
+
+    .logo span {
+      color: #6a0dad;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #6a0dad;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .auth-btn {
+      background-color: #6a0dad;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .auth-btn:hover {
+      background-color: #580da1;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 36px;
+      color: #6a0dad;
+    }
+
+    .about-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .content h2 {
+      color: #6a0dad;
+      border-left: 5px solid #6a0dad;
+      padding-left: 12px;
+      margin-top: 30px;
+      font-size: 24px;
+    }
+
+    .content p {
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 10px 0;
+    }
+
+    .content ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .content ul li {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      h1 {
+        font-size: 28px;
+      }
+      .about-container {
+        margin: 20px 16px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar">
+    <div class="logo">Ticket<span>Nest</span></div>
+    <ul class="nav-links">
+      <li><a th:href="@{/dashboard}">Home</a></li>
+      <li><a th:href="@{/service}">Services</a></li>
+      <li><a th:href="@{/contact}">Contact</a></li>
+    </ul>
+    <div class="user-info">
+      <h4 th:text="${name}"></h4>
+      <a th:href="@{/login}">
+        <button class="auth-btn">Logout</button>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<h1>About Us</h1>
+<section class="about-container">
+  <div class="content">
+    <h2>Welcome to TicketNest</h2>
+    <p>TicketNest is an online ticket booking system designed to provide a seamless and efficient booking experience for various travel and entertainment services. Our platform allows users to book train tickets, bus tickets, and movie tickets with ease, ensuring convenience and reliability.</p>
+
+    <h2>Our Mission</h2>
+    <p>At TicketNest, our mission is to simplify the ticket booking process by offering a user-friendly interface, secure transactions, and real-time availability updates. We strive to make travel and entertainment bookings hassle-free for our users.</p>
+
+    <h2>Features of TicketNest</h2>
+    <ul>
+      <li><strong>Multi-Service Booking:</strong> Book train, bus, and movie tickets in one place.</li>
+      <li><strong>User-Friendly Interface:</strong> Simple and intuitive design for a seamless experience.</li>
+      <li><strong>Real-Time Updates:</strong> Get instant confirmation and availability status.</li>
+      <li><strong>Secure Transactions:</strong> Safe and encrypted payment options.</li>
+    </ul>
+
+    <h2>Technologies Used</h2>
+    <p><strong>Backend:</strong> Java, Spring Boot, JDBC</p>
+    <p><strong>Frontend:</strong> HTML, CSS</p>
+    <p><strong>Database:</strong> MySQL.</p>
+
+    <h2>Future Enhancements</h2>
+    <p>We aim to expand TicketNest by incorporating additional features such as:</p>
+    <ul>
+      <li>Admin features, allows the admin to effortlessly add or delete new Buses, Trains and Movies</li>
+      <li>AI-Based Suggestions, Implement AI to recommend relevant movies or travel routes based on user preferences and past booking history.</li>
+      <li> E-Ticket Generation, Enable automatic generation of e-tickets in PDF format, which can be downloaded or sent to the user via email after successful booking.</li>
+      <li>Multiple Ticket Integration : Allow users to book multiple tickets (e.g., bus + movie or train + movie) in a single session and complete the payment in one transaction for convenience</li>
+    </ul>
+
+    <h2>Contact Us</h2>
+    <p>For any queries or support, feel free to reach out to our team at <strong>ticketnest00@gmail.com</strong>.</p>
+  </div>
+</section>
+</body>
+</html>

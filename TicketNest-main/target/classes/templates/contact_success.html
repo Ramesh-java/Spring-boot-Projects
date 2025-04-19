@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Contact Submitted</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 32px;
+            color: #6a0dad;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 30px;
+        }
+
+        a {
+            text-decoration: none;
+            background: linear-gradient(90deg, #bb86fc, #6a0dad);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        a:hover {
+            background: linear-gradient(90deg, #a45de4, #520b92);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+<h2>🎉 Message Sent Successfully!</h2>
+<p>We’ll get back to you soon. Thank you for reaching out. 🙌</p>
+<a th:href="@{/dashboard}">Back to Home</a>
+</body>
+</html>

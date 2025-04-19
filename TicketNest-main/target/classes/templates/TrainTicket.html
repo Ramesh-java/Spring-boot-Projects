@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TN - Train Booking</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .logo span{
+            color: #6a0dad;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            color: #6a0dad;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .auth-btn {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #6a0dad;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: #6a0dad;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #5a0ca1;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">Ticket<span>Nest</span></div>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/service}">Services</a></li>
+            <li><a th:href="@{/about-in}">About</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+        </ul>
+
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Train Booking</h2>
+
+    <div class="section">
+        <h3>Train Details</h3>
+        <p><strong>Train Name:</strong><span th:text="${train.getName()}"></span></p>
+        <p><strong>Coach : </strong><span th:text="${coachName.toUpperCase()}"></span></p>
+        <p><strong>From:</strong><span th:text="${train.getSource()}"></span> &nbsp;&nbsp; <strong>To:</strong><span th:text="${train.getDestination()}"></span></p>
+        <p><strong>Departure:</strong><span th:text="${train.getDepartureTime()}"></span> &nbsp;&nbsp; <strong>Arrival:</strong><span th:text="${train.getArrivalTime()}"></span></p>
+        <p><strong>Date :</strong><span th:text="${train.getDate()}"></span></p>
+        <p><strong>Price :</strong><span th:text="${price}"></span></p>
+    </div>
+    <form th:action="@{/coach-page/{trainId}/{coachName}(trainId=${train.getId()}, coachName=${coachName})}" method="get">
+
+    <div class="section">
+        <label for="tickets">Number of Tickets:</label>
+        <input type="number" name="tickets" id="tickets" placeholder="Enter number of tickets">
+    </div>
+        <label for="button">Confirm booking</label>
+        <input id="button" type="submit" >
+    </form>
+
+</div>
+</body>
+</html>

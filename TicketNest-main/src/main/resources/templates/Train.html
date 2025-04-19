@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Route Selection - TicketNest</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+
+        }
+        .logo span{
+            color: #6a0dad;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-links a:hover {
+            color: #6a0dad;
+        }
+        .span {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .route-container {
+            text-align: center;
+            padding: 40px;
+        }
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+            margin: auto;
+        }
+        .search-box input, .search-box button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .traveller{
+            display:flex;
+            flex-direction: column;
+
+
+        }
+        .search-box button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .search-box button:hover {
+            background-color: #550b8a;
+        }
+        /*.route-list {*/
+        /*    margin-top: 20px;*/
+        /*}*/
+        .hero {
+            list-style: none;
+            margin: 10px auto;
+            width: 80%;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .car{
+            align-items: center;
+        }
+        .bus-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+
+            width: 100%;
+            margin: 10px;
+            padding: 15px;
+            padding-left:20px;
+
+        }
+        .travel-container{
+            display: flex;
+            flex-direction: row;
+        }
+        .button-element {
+            display: flex;
+            justify-content: flex-end; /* Aligns the button to the right inside the container */
+            align-items: center;
+            margin-right: 30px;
+            margin-top: 10px; /* Adjust as needed */
+            width: 100%; /* Ensures it stays inside the container */
+        }
+        .btn-element {
+            height: 35px;
+            width: 60px;
+            background-color: #6a0dad;
+            color: #ffffff;
+            border-color: #6a0dad;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .bus-info p {
+            margin: 5px 0;
+        }
+        .route-item button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .route-item button:hover {
+            background-color: #550b8a;
+        }
+    </style>
+    <!--<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const routeList = document.getElementById("route-list");
+            const fromInput = document.getElementById("from");
+            const toInput = document.getElementById("to");
+            const dateInput = document.getElementById("date");
+            const searchButton = document.getElementById("search-button");
+
+            const routes = [
+                { name: "Sharma Travels", from: "Jaipur", to: "Kota", departure: "03:46", arrival: "17:00", seats: 2, date: "2025-02-25" },
+                { name: "Million Travels", from: "Jaipur", to: "Kota", departure: "16:55", arrival: "07:55", seats: 14, date: "2025-02-26" },
+                { name: "Express Travels", from: "Delhi", to: "Mumbai", departure: "08:00", arrival: "20:00", seats: 5, date: "2025-02-26" },
+                { name: "Sundaram travels", from: "Poonamelle", to: "Tambaram", departure: "20:00", arrival: "21:00", seats: 25, date: "2025-07-25"}
+            ];
+
+            function renderRoutes(filterFrom = "", filterTo = "", filterDate = "") {
+                routeList.innerHTML = "";
+                routes.filter(route => {
+                    return (filterFrom === "" || route.from.toLowerCase().includes(filterFrom.toLowerCase())) &&
+                        (filterTo === "" || route.to.toLowerCase().includes(filterTo.toLowerCase())) &&
+                        (filterDate === "" || route.date === filterDate);
+                }).forEach(route => {
+                    const routeItem = document.createElement("div");
+                    routeItem.classList.add("route-item");
+                    routeItem.innerHTML =
+                        <div>
+                            <strong>${route.name}</strong><br>
+                            From: ${route.from} → To: ${route.to}<br>
+                            Departure: ${route.departure} → Arrival: ${route.arrival}<br>
+                            Date: ${route.date}<br>
+                            Available Seats: ${route.seats}
+                        </div>
+                        <button onclick=navigateToSeatSelection()>Book</button>
+                    ;
+                    routeList.appendChild(routeItem);
+                });
+            }
+            function navigateToSeatSelection() {
+                window.location.href = "busseat.html";
+            }
+
+            searchButton.addEventListener("click", function() {
+                const fromValue = fromInput.value;
+                const toValue = toInput.value;
+                const dateValue = dateInput.value;
+                renderRoutes(fromValue, toValue, dateValue);
+            });
+
+            renderRoutes();
+        });
+    </script>-->
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">Ticket<span>Nest</span></div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}">Home</a></li>
+            <li><a th:href="@{service}">Services</a></li>
+            <li><a th:href="@{/aboutin}">About</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="route-container">
+    <h1>Select Your Route</h1>
+    <div class="search-box">
+        <form action="/search-train" method="GET">
+            <input type="text" id="from" placeholder="From" name="from" required>
+            <input type="text" id="to" placeholder="To" name="to" required>
+            <input type="date" id="date" name="date" required>
+            <button type="submit" id="search-button">Find Train</button>
+        </form>
+    </div>
+</section>
+
+
+<ul class="hero">
+    <li th:each="items : ${List}" class="bus-card " >
+        <div class="travel-container">
+
+
+            <div class="traveller">
+                <strong><span th:text="${items.getName()}"></span></strong>
+                <div class="span">
+                    <strong >From:</strong> <span th:text="${items.getSource()}"></span>
+                    <strong > → To:</strong> <span th:text="${items.getDestination()}"></span>
+                </div>
+                <div class="span" >
+                    <strong>Departure Time :</strong> <span th:text="${items.getDepartureTime()}"></span>
+                    <strong>Arrival Time :</strong> <span th:text="${items.getArrivalTime()}"></span>
+                </div>
+                <strong>Date :</strong><span th:text="${items.getDate()}"></span>
+
+                <strong>Seats :</strong><span th:text="${items.getAvailability()}"></span>
+            </div>
+            <div class="button-element">
+                <a th:href="@{/train-ticket/{trainId}(trainId=${items.getId()})}">
+                <button type="submit" class="btn-element">Book</button></a>
+            </div>
+        </div>
+    </li>
+</ul>
+</body>
+</html>

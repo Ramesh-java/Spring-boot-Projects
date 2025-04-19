@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account - TicketNest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+
+        }
+        .logo span{
+            color: #6a0dad;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-links a:hover {
+            color: #6a0dad;
+        }
+        .span {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .ticket-section {
+            margin-bottom: 30px;
+        }
+
+        .ticket {
+            background: linear-gradient(135deg, #6a0dad 10%, #8e44ad 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .ticket:hover {
+            transform: scale(1.02);
+        }
+
+        .ticket p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .ticket p strong {
+            font-size: 18px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .no-bookings {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <div class="logo">Ticket<span>Nest</span></div>
+        <ul class="nav-links">
+            <li><a th:href="@{/dashboard}">Home</a></li>
+            <li><a th:href="@{service}">Services</a></li>
+            <li><a th:href="@{/aboutin}">About</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>User Bookings</h2>
+
+    <div class="ticket-section" th:if="${BusTicket != null and not #lists.isEmpty(BusTicket)}">
+        <h3>🚍 Bus Tickets</h3>
+        <div th:each="ticket : ${BusTicket}" class="ticket">
+            <p><strong>Bus Name:</strong> <span th:text="${ticket.getBus().getName()}"></span></p>
+            <p><strong>Source:</strong> <span th:text="${ticket.getBus().getSource()}"></span></p>
+            <p><strong>Destination:</strong> <span th:text="${ticket.getBus().getDestination()}"></span></p>
+            <p><strong>Seats:</strong> <span th:text="${ticket.getSeats()}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${ticket.getBus().getDate()}"></span></p>
+            <p><strong>Price:</strong> <span class="price">&#8377;<span th:text="${(ticket.getBus().getPrice())*busSeatCount[ticket.id]}"></span></span></p>
+        </div>
+    </div>
+
+    <div class="ticket-section" th:if="${TrainTicket != null and not #lists.isEmpty(TrainTicket)}">
+        <h3>🚆 Train Tickets</h3>
+        <div th:each="ticket : ${TrainTicket}" class="ticket">
+            <p><strong>Train Name:</strong> <span th:text="${ticket.getTrain().getName()}"></span></p>
+            <p><strong>Coach:</strong> <span th:text="${ticket.getCoach().getName()}"></span></p>
+            <p><strong>Source:</strong> <span th:text="${ticket.getTrain().getSource()}"></span></p>
+            <p><strong>Destination:</strong> <span th:text="${ticket.getTrain().getDestination()}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${ticket.getTrain().getDate()}"></span></p>
+            <p><strong>Price:</strong> <span class="price">&#8377;<span th:text="${ticket.getCoach().getPrice()}"></span></span></p>
+        </div>
+    </div>
+
+    <div class="ticket-section" th:if="${MovieTicket != null and not #lists.isEmpty(MovieTicket)}">
+        <h3>🎬 Movie Tickets</h3>
+        <div th:each="ticket : ${MovieTicket}" class="ticket">
+            <p><strong>Movie:</strong> <span th:text="${ticket.getShowTime().getMovie().getName()}"></span></p>
+            <p><strong>Theatre:</strong> <span th:text="${ticket.getShowTime().getTheatre()}"></span></p>
+            <p><strong>Time:</strong> <span th:text="${ticket.getShowTime().getTime()}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${ticket.getShowTime().getDate()}"></span></p>
+            <p><strong>Booked Seats :</strong><span th:text="${ticket.getSeats()}"></span></p>
+            <p><strong>Price:</strong> <span class="price">&#8377;<span th:text="${ticket.getSeating().getPrice()*movieSeatCount[ticket.id]}"></span></span></p>
+
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(BusTicket) and #lists.isEmpty(TrainTicket) and #lists.isEmpty(MovieTicket)}">
+        <h4 class="no-bookings">No bookings found.</h4>
+    </div>
+
+</div>
+
+</body>
+</html>

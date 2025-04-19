@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Seat Selection - TicketNest</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+
+        }
+        .logo span{
+            color: #6a0dad;
+        }
+        .seat-container {
+            text-align: center;
+            padding: 40px;
+        }
+        .bus-layout {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+            margin: auto;
+            position: relative;
+        }
+        .bus-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .seat-row {
+            display: flex;
+            gap: 5px;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: lightgray;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .driver-seat {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            grid-column: 5; /* Ensures it aligns to the last column */
+        }
+
+        .selected {
+            background-color: green;
+            color: white;
+        }
+
+        .aisle-space {
+            width: 50px;
+            height: 40px;
+        }
+
+        .empty-space {
+            width: 40px;
+            height: 40px;
+            visibility: hidden;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            border: 2px solid black;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            background-color: white;
+        }
+        .available:hover {
+            background-color: #dcdcdc;
+        }
+        .selected {
+            background-color: #6a0dad!important;
+        }
+        .unavailable {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .female {
+            background-color: #ffb6c1;
+        }
+        .driver-seat {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            grid-column: 5;
+        }
+        .seat-legend {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-item div {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: 2px solid black;
+        }
+        .hero {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .book-btn {
+            text-decoration: none;
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            /*<![CDATA[*/
+            const busId = /*[[${id}]]*/ null;
+            /*]]>*/
+            const availableSeats=/*[[${availableSeats}]]*/ [];
+
+            const seatLayout = document.getElementById("bus-layout");
+            const selectedSeatsDisplay = document.getElementById("selected-seats");
+            const bookButton = document.getElementById("book-btn");
+            let selectedSeats = [];
+
+            renderSeats(availableSeats);
+            function renderSeats(availableSeats) {
+                seatLayout.innerHTML = "";
+
+                let seatArrangement = [
+                    ["aisle","aisle","aisle","aisle","driver"],
+                    ["seat", "seat", "aisle", "seat", "seat"],
+                    ["seat", "seat", "aisle", "seat", "seat"],
+                    ["seat", "seat", "aisle", "seat", "seat"],
+                    ["seat", "seat", "aisle", "seat", "seat"],
+                    ["seat", "seat", "aisle", "seat", "seat"],
+                    ["seat", "seat",  "seat",  "seat","seat" ],
+                ];
+
+                let seatNumber = 1;
+
+                seatArrangement.forEach(row => {
+                    let rowDiv = document.createElement("div");
+                    rowDiv.classList.add("seat-row");
+
+                    row.forEach(type => {
+                        let seat = document.createElement("div");
+
+                        if (type === "aisle") {
+                            seat.classList.add("aisle-space");
+                        } else if (type === "driver") {
+                            seat.classList.add("seat", "driver-seat");
+                            seat.innerText = "D";
+                        } else if (type === "") {
+                            seat.classList.add("empty-space");
+                        } else {
+                            let isAvailable = availableSeats.includes(seatNumber);
+                            seat.classList.add("seat", isAvailable ? "available" : "unavailable");
+                            seat.innerText = seatNumber;
+
+                            if (isAvailable) {
+                                seat.dataset.seatNumber = seatNumber;
+                                seat.addEventListener("click", function(event) {
+                                    event.stopPropagation();
+
+                                    let seatNum = Number(this.dataset.seatNumber); // Ensure it's a number
+
+                                    if (selectedSeats.includes(seatNum)) {
+                                        selectedSeats = selectedSeats.filter(num => num !== seatNum);
+                                        this.classList.remove("selected");
+                                    } else {
+                                        selectedSeats.push(seatNum);
+                                        this.classList.add("selected");
+                                    }
+
+                                    selectedSeatsDisplay.innerText = "Selected Seats: " + selectedSeats.join(", ");
+                                    console.log("Selected Seats Array:", selectedSeats);
+                                });
+                            } else {
+                                seat.classList.add("disabled");
+                            }
+                            seatNumber++;
+                        }
+                        rowDiv.appendChild(seat);
+                    });
+                    seatLayout.appendChild(rowDiv);
+                });
+            }
+
+            console.log("Initial selectedSeats:", selectedSeats);
+
+            bookButton.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent default navigation
+
+                if (selectedSeats.length === 0) {
+                    alert("Please select at least one seat before booking!");
+                    return;
+                }
+
+                // Convert the selected seats array into a comma-separated string
+                const seatNumbers = selectedSeats.join(",");
+
+                // Redirect to booking page with selected seats
+                const bookingUrl = `/book?busId=${busId}&seats=${seatNumbers}`;
+                window.location.href = bookingUrl;
+            });
+        });
+    </script>
+
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">Ticket<span>Nest</span></div>
+    </nav>
+</header>
+
+<section class="seat-container">
+    <h1>Select Your Seat</h1>
+    <div class="bus-layout" id="bus-layout"></div>
+    <div class="seat-legend">
+        <div class="legend-item"><div class="available"></div> Available</div>
+        <div class="legend-item"><div class="unavailable"></div> Unavailable</div>
+        <div class="legend-item"><div class="selected" style="background-color: violet;"></div> Selected</div>
+        <div class="legend-item"><div class="driver-seat" style="background-color: black; color: white;"></div> Driver</div><br><br><p></p>
+    </div>
+
+
+</section>
+
+
+<section class="hero">
+    <!--    <a id="book-btn" class="book-btn" >Book Now →</a>-->
+    <button id="book-btn" class="book-btn">Book Now</button>
+</section>
+</body>
+</html>

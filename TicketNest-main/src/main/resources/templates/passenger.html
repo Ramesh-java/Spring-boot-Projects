@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Details | Ticket Booking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Change from center to flex-start */
+            min-height: 100vh; /* Ensure body expands */
+            background: linear-gradient(135deg, #fdfdfd, #ffffff);
+            overflow-y: auto; /* Allow scrolling if needed */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-in-out;
+            position: relative; /* Changed from fixed to relative */
+            margin-top: 20px; /* Prevent it from sticking at the top */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            color: #000000;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .ticket-info {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #6a0dad;
+        }
+
+        .passenger-form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6a0dad;
+            text-align: left;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .passenger-form:hover {
+            transform: translateY(-2px);
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 8px;
+            color:#6a0dad;
+        }
+
+        .input-group {
+            position: relative;
+            margin-top: 5px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #000000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            outline: none;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-bottom: 2px solid #6a0dad;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #6a0dad;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding-left: 40px;
+        }
+
+        .error {
+            color: #6a0dad;
+            font-size: 12px;
+            display: none;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color:  #6a0dad;
+            color: #ffffff;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            font-weight: bold;
+            padding-bottom: 20px;
+        }
+
+        button:hover {
+            background: #3a0363;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .input-group input,
+            .input-group select {
+                font-size: 13px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Passenger Details</h2>
+    <p class="ticket-info"><i class="fas fa-ticket-alt"></i> Number of Tickets: <span id="ticketCount"></span></p>
+
+    <div id="passengerDetails"></div>
+
+    <button onclick="submitForm()"><i class="fas fa-check-circle"></i> Submit</button>
+</div>
+
+
+<script th:inline="javascript">
+    let seats = /*[[${seats}]]*/ [];
+    let busId = /*[[${busId}]]*/ 0;
+
+
+    document.getElementById("ticketCount").innerText = seats.length;
+
+    let passengerDetailsDiv = document.getElementById("passengerDetails");
+
+    for (let i = 0; i < seats.length; i++) {
+        let form = document.createElement("div");
+        form.classList.add("passenger-form");
+        form.innerHTML = `
+                <h3 style="color: #6a0dad;;">Passenger ${i+1}</h3>
+
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name${i}" placeholder="Enter name" required>
+                </div>
+                <span class="error" id="errorName${i}">Name is required</span>
+
+                <div class="input-group">
+                    <i class="fas fa-calendar"></i>
+                    <input type="number" id="age${i}" placeholder="Enter age" required>
+                </div>
+                <span class="error" id="errorAge${i}">Age is required</span>
+
+                <div class="input-group">
+                    <i class="fas fa-venus-mars"></i>
+                    <select id="gender${i}">
+                        <option style="color: black" value="">Select Gender</option>
+                        <option style="color: black" value="Male">Male</option>
+                        <option style="color: black" value="Female">Female</option>
+                        <option style="color: black" value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+
+                   <h5>Seat No: ${seats[i]}</h5>
+                </div>
+                <span class="error" id="errorGender${i}">Gender is required</span>
+            `;
+        passengerDetailsDiv.appendChild(form);
+    }
+
+    function submitForm() {
+        event.preventDefault();
+        let passengers = [];
+        let isValid = true;
+
+        for (let i = 0; i < seats.length; i++) {
+            let name = document.getElementById(`name${i}`).value.trim();
+            let age = document.getElementById(`age${i}`).value.trim();
+            let gender = document.getElementById(`gender${i}`).value;
+
+            let errorName = document.getElementById(`errorName${i}`);
+            let errorAge = document.getElementById(`errorAge${i}`);
+            let errorGender = document.getElementById(`errorGender${i}`);
+
+            errorName.style.display = name ? "none" : "block";
+            errorAge.style.display = age ? "none" : "block";
+            errorGender.style.display = gender ? "none" : "block";
+
+            if (!name || !age || !gender) {
+                isValid = false;
+            }
+
+            passengers.push({ name, age, gender, seatId: seats[i], busId});
+        }
+
+        if (isValid) {
+            fetch("/submitPassengers", {  // Adjust endpoint based on your controller method
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(passengers) // Send as JSON
+            })
+                .then(response => {
+                    if (!response.ok){
+                        throw new Error("Failed to submit passenger details.");
+                        //window.location.href = response.url;
+                    }return response.text();
+                })
+                .then(url =>{
+                    console.log("Redirecting to:", url);
+                    window.location.href=url;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to submit passenger details.");
+                });
+        } else {
+            alert("Please fill in all passenger details correctly.");
+        }
+    }
+</script>
+</body>
+</html>
